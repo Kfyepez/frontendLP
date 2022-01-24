@@ -1,9 +1,21 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class HomePage extends StatelessWidget {
 
   final usercontroller = TextEditingController();
   final passcontroller = TextEditingController();
+
+  List? data;
+
+  getlugares() async{
+    http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/destinos_turisticos'));
+    data = json.decode(response.body);
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +26,7 @@ class HomePage extends StatelessWidget {
             icon: const Icon(Icons.more_vert),
             tooltip: 'Actualizando',
             onPressed: () {
+              getlugares();
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Actualizando ventana')));
             }),
@@ -61,52 +74,20 @@ class HomePage extends StatelessWidget {
             ),
           ])),
 
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.black12),
-                    foregroundColor:
-                    MaterialStateProperty.all<Color>(Colors.white),
-                  ),
-                  onPressed: () {
-
-                    //Con este comando se redirigirá a la pagina que ustedes creen
-                    /*Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Nombre de la clase creada()),
-                    );*/
-
-                  },
-                  child: Text('Parte Santiago'),
-                )),
-            Container(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.black12),
-                    foregroundColor:
-                    MaterialStateProperty.all<Color>(Colors.white),
-                  ),
-                  onPressed: () {
-
-                    //Con este comando se redirigirá a la pagina que ustedes creen
-                    /*Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Nombre de la clase creada()),
-                    );*/
-
-                  },
-                  child: Text('Parte Andrea'),
-                ))
-          ],
-        ),
-        
+      body: ListView.builder(
+        itemCount: data == null ? 0 : data?.length,
+        itemBuilder: (BuildContext context, int index){
+          return Card(
+            child: Column(
+              children: <Widget>[
+                Text("${data?[index]["name"]}"),
+                Text("${data?[index]["description"]}"),
+                Text("${data?[index]["ubication"]}"),
+                Text("${data?[index]["score"]}"),
+              ],
+            ),
+          )
+        },
       ),
     );
 

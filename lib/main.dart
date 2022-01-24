@@ -2,7 +2,9 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 import 'package:flutter/material.dart';
-import 'package:proyectolpbackend/loginPage.dart';
+
+import 'loginPage.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -43,30 +45,30 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset('assets/imagenes/forestlover.png'),
-          Container(
-            child: Text("Bienvenido"),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/forestlover.png'),
+              Container(
+                child: Text("Bienvenido"),
+              ),
+              Container(
+                child: Text("Encuentra los mejores lugares para pasear en tu ciudad"),
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+                child: Text('Empezar'),
+              ),
+            ],
           ),
-          Container(
-            child: Text("Encuentra los mejores lugares para pasear en tu ciudad"),
-          ),
-          ElevatedButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
-            },
-            child: Text('Empezar'),
-          ),
-        ],
-      ),
-    ));
+        ));
   }
 }

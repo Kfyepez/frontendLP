@@ -3,11 +3,24 @@ import 'package:frontend/registerPage.dart';
 
 import 'homePage.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+
 
 class LoginPage extends StatelessWidget {
 
   final usercontroller = TextEditingController();
   final passcontroller = TextEditingController();
+
+  List? data;
+
+  getusers() async{
+    http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/personas'));
+      data = json.decode(response.body);
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,18 +91,24 @@ class LoginPage extends StatelessWidget {
                         MaterialStateProperty.all<Color>(Colors.white),
                       ),
                       onPressed: () {
-                        if (usercontroller.text == "admin" &&
-                            passcontroller.text == "admin") {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-                        } else {
+                        int temp = 0;
+                        getusers();
+                        for(var i = 0; i<10;i++){
+                          if (usercontroller.text == data?[i]["user"] &&
+                              passcontroller.text == data?[i]["password"]){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => HomePage()),
+                            );
+                            temp = 1;
+                          }
+                        }
+                        if(temp ==0){
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text("Datos incorrectos")));
                         }
-                      },
+                        },
                       child: Text('Iniciar Sesión'),
                     )),
                 Container(

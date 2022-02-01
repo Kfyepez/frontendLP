@@ -18,7 +18,7 @@ class LoginPage extends StatelessWidget {
   final usercontroller = TextEditingController();
   final passcontroller = TextEditingController();
   late String correoUsuario;
-  late final ClasePersona persona;
+   late ClasePersona persona;
 
   Map data={};
   List userData=[];

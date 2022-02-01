@@ -29,6 +29,12 @@ class _HomePageState extends State<HomePage> {
   ClasePersona? persona;
   _HomePageState({this.persona});
 
+  @override
+  initState(){
+    super.initState();
+    getDestinos();
+  }
+
   getDestinos() async{
     http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/destinos_turisticos'));
     data = json.decode(response.body);
@@ -40,7 +46,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    getDestinos();
+    //getDestinos();
     return Scaffold(
 
       appBar: AppBar(title: Text('Inicio'), actions: <Widget>[

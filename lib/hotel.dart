@@ -1,13 +1,13 @@
 class Hotel{
   String _name;
-  double _price;
+  int _price;
   String _phone;
 
   Hotel(this._name, this._price, this._phone);
 
-  double get price => _price;
+  int get price => _price;
 
-  set price(double value) {
+  set price(int value) {
     _price = value;
   }
 

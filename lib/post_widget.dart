@@ -1,11 +1,11 @@
-import 'favorite_button.dart';
-//import 'package:first_flutter_app/post.dart';
+import '/favorite_button.dart';
+import '/post.dart';
 import 'package:flutter/material.dart';
-
-import 'homePage.dart';
 class Post_Widget extends StatelessWidget{
-  ClaseDestino info_destino;
-  Post_Widget(this.info_destino);
+  String photo_forest_url;
+  Post post;
+
+  Post_Widget(this.photo_forest_url, this.post);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class Post_Widget extends StatelessWidget{
           shape: BoxShape.circle,
           image: DecorationImage(
               fit: BoxFit.fitHeight,
-              image: NetworkImage(info_destino.postsDestino[0]["imagen"]["link"])
+              image: NetworkImage(photo_forest_url)
           )
       ),
     );
@@ -36,7 +36,7 @@ class Post_Widget extends StatelessWidget{
       children: [
         photo,
         horizontal_space,
-        Text(this.info_destino.nombreDestino,style: style)
+        Text(this.post.name_forest,style: style)
       ],
     );
     Widget post=Container(
@@ -44,7 +44,7 @@ class Post_Widget extends StatelessWidget{
       decoration: BoxDecoration(
         image: DecorationImage(
             fit: BoxFit.contain,
-            image: NetworkImage(this.info_destino.postsDestino[0]["imagen"]["link"])
+            image: NetworkImage(this.post.link_img)
         )
     )
     );
@@ -60,16 +60,18 @@ class Post_Widget extends StatelessWidget{
       ],
     );
     Widget description= Expanded(
-      child: Text("${this.info_destino.nombreDestino}: "+this.info_destino.descripcionDestino,style: style,),
+      child: Text("${this.post.name_forest}: "+this.post.description,style: style,),
     );
 
-    return Column(
-      children: [
-        header,
-        post,
-        icons,
-        description
-      ],
+    return Scaffold(
+      body: Column(
+        children: [
+          header,
+          post,
+          icons,
+          description
+        ],
+      ),
     );
   }
 

@@ -1,5 +1,7 @@
 //import 'package:first_flutter_app/post.dart';
+import 'package:frontend/createDestino.dart';
 import 'package:frontend/homePage.dart';
+import 'package:frontend/post.dart';
 
 import 'post_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,7 +28,7 @@ class _Information_ForestState extends State<Information_Forest> {
         color: Colors.yellow,
       ));
     }
-    if (piso != widget.info_destino.scoreDestino.floor()) {
+    if (piso != widget.info_destino.scoreDestino) {
       items.add(Icon(
         Icons.star_half,
         color: Colors.yellow,
@@ -41,7 +43,7 @@ class _Information_ForestState extends State<Information_Forest> {
   Widget galery() {
     List<Widget> images = [];
     String photo_forest_url = widget.info_destino.postsDestino[0].link_img;
-    for (dynamic post in widget.info_destino.postsDestino) {
+    for (Post post in widget.info_destino.postsDestino) {
       images.add(GestureDetector(
         child: Container(
           width: 100,
@@ -60,7 +62,7 @@ class _Information_ForestState extends State<Information_Forest> {
                   pageBuilder: (BuildContext context,
                           Animation<double> animation,
                           Animation<double> secondaryAnimation) =>
-                      Post_Widget(widget.info_destino.postsDestino[0]["imagen"]["link"])))
+                      Post_Widget(widget.info_destino.postsDestino[0].link_img, post)))
         },
       ));
     }
@@ -179,7 +181,7 @@ class _Information_ForestState extends State<Information_Forest> {
       width: 200,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
-        child: Image(image: NetworkImage(widget.info_destino.postsDestino[0])),
+        child: Image(image: NetworkImage(widget.info_destino.postsDestino.first.link_img)),
       ),
     );
     Widget vertical_space = SizedBox(
@@ -269,11 +271,11 @@ class _Information_ForestState extends State<Information_Forest> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              "345 likes",
+              "4512 likes",
               style: style,
             ),
             Text(
-              "1450 views",
+              "10004 views",
               style: style,
             )
           ],

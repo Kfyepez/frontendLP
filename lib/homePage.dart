@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/createDestino.dart';
 import 'package:frontend/forest_account.dart';
+import 'package:frontend/post.dart';
 import 'package:frontend/post_widget.dart';
 import 'hotel.dart';
 import 'loginPage.dart';
@@ -16,9 +17,9 @@ class ClaseDestino{
   String descripcionDestino;
   String ubicacionDestino;
   double scoreDestino;
-  List postsDestino;
-  List rutasDestino;
-  List hotelesDestino;
+  List<Post> postsDestino;
+  List<String> rutasDestino;
+  List<Hotel> hotelesDestino;
   ClaseDestino({required this.idDestino, required this.nombreDestino, required this.descripcionDestino, required this.ubicacionDestino, required this.scoreDestino, required this.postsDestino, required this.rutasDestino, required this.hotelesDestino});
 }
 
@@ -30,32 +31,43 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState(persona: persona);
 
-  late List<dynamic> posts;
-  late List rutas;
-  late List hoteles;
+  late List<Post> posts = [];
+  late List<String> rutas = [];
+  late List<Hotel> hoteles = [];
   Map mapPost={};
   Map mapRutas={};
   Map mapHoteles={};
 
   getPost(String id) async{
     http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/posts/${id}'));
-    mapPost = json.decode(response.body);
-    posts = mapPost["posts"];
-    //debugPrint(posts.toString());
+    List mapa = json.decode(response.body)["posts"] as List;
+    for(Map<String, dynamic> data in mapa){
+        String descripcionforest = data["description"];
+        String nameforest = data["destino"]["name"];
+        String linkforest = data["imagen"]["link"];
+        Post nuevopost = Post(nameforest, linkforest, descripcionforest);
+        posts.add(nuevopost);
+    }
+    debugPrint(posts.toString());
   }
   getRutas(String id) async{
     http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/rutas/${id}'));
-    mapRutas = json.decode(response.body);
-    rutas = mapRutas["rutas"];
-    //debugPrint(json.decode(response.body).runtimeTypetoString());
-    //debugPrint(rutas.toString());
+    List mapa = json.decode(response.body)["rutas"] as List;
+    for(Map<String, dynamic> data in mapa){
+      String ruta = data["path"];
+      rutas.add(ruta);
+    }
+
   }
   getHoteles(String id) async{
     http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/recomendaciones_hoteles/${id}'));
-    mapHoteles = json.decode(response.body);
-    hoteles = mapHoteles["hoteles"];
-    //ebugPrint(mapHoteles.toString());
-    //debugPrint(hoteles.toString());
+    List mapa = json.decode(response.body)["hoteles"] as List;
+    for(Map<String, dynamic> data in mapa){
+      String nombreHotel = data["name"];
+      int precioHotel = data["precio"];
+      Hotel nuevoHotel = Hotel(nombreHotel, precioHotel, "0989658754");
+      hoteles.add(nuevoHotel);
+    }
   }
 
 }

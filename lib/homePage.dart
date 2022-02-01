@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'loginPage.dart';
 
@@ -22,21 +23,14 @@ class _HomePageState extends State<HomePage> {
   ClasePersona? persona;
   _HomePageState({this.persona});
 
-
-
   getDestinos() async{
     http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/destinos_turisticos'));
     data = json.decode(response.body);
-
-    //userData?.map((text) => debugPrint(text));
-    //debugPrint(userData?[0]["id"].toString());
-    //debugPrint(userData?.length);
-    //destinosData.forEach((element) {print(element["name"]);});
     setState(() {
       destinosData = data["destinos"];
     });
-
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +121,6 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         },
-
-
       ),
     );
 

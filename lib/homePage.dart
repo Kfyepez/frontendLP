@@ -6,6 +6,12 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
+class ClaseDestino{
+  String nombreDestino;
+  String scoreDestino;
+  ClaseDestino({required this.nombreDestino, required this.scoreDestino});
+}
+
 class HomePage extends StatefulWidget {
 
   ClasePersona? persona;

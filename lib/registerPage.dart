@@ -2,16 +2,88 @@ import 'package:flutter/material.dart';
 
 import 'loginPage.dart';
 
+import 'package:path/path.dart';
+//import 'package:sqflite/sqflite.dart';
+import 'dart:async';
 
+import 'package:mysql1/mysql1.dart';
+
+
+
+/*
+class CreacionPersona{
+  String nombreUsuario;
+  String correoUsuario;
+  String contrasenaUsuario;
+  CreacionPersona({required this.nombreUsuario, required this.correoUsuario, required this.contrasenaUsuario});
+  Map<String, dynamic> toMap() {
+    return {
+      'user': nombreUsuario,
+      'password': contrasenaUsuario,
+      'email': correoUsuario,
+    };
+  }
+  @override
+  String toString() {
+    return 'CreacionPersona{user: $nombreUsuario, password: $contrasenaUsuario, email: $correoUsuario}';
+  }
+}
+*/
 class RegisterPage extends StatelessWidget {
 
   final emailcontroller = TextEditingController();
   final usercontroller = TextEditingController();
   final passcontroller = TextEditingController();
   final passcontroller2 = TextEditingController();
+  var conn;
 
+  conectarsebd() async{
+    var settings = new ConnectionSettings(
+        host: '10.0.2.2',
+        port: 3306,
+        user: 'root',
+        password: null,
+        db: 'forest_lover'
+    );
+    conn = await MySqlConnection.connect(settings);
+  }
+
+  insertarPersona(String user, String correo, String pass) async{
+    var result = await conn.query('insert into personas (user, password, email) values (?, ?, ?)', [user, pass, correo]);
+    debugPrint("Prueba1");
+    debugPrint(result.toString());
+    debugPrint("Prueba2");
+  }
+
+  /*
+  // Define a function that inserts dogs into the database
+  Future<void> insertPersona(CreacionPersona persona) async {
+    final database = openDatabase(
+      // Set the path to the database. Note: Using the `join` function from the
+      // `path` package is best practice to ensure the path is correctly
+      // constructed for each platform.
+      join(await getDatabasesPath(), 'forest_lover'),
+    );
+    // Get a reference to the database.
+    final db = await database;
+
+    // Insert the CreacionPersona into the correct table. You might also specify the
+    // `conflictAlgorithm` to use in case the same persona is inserted twice.
+    //
+    // In this case, replace any previous data.
+    debugPrint("prueba1");
+    debugPrint(db.toString());
+    debugPrint("prueba2");
+    await db.insert(
+      'personas',
+      persona.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+*/
   @override
   Widget build(BuildContext context) {
+    conectarsebd();
     return Scaffold(
 
       appBar: AppBar(title: Text('Formulario de registro'), actions: <Widget>[
@@ -93,9 +165,18 @@ class RegisterPage extends StatelessWidget {
                         foregroundColor:
                         MaterialStateProperty.all<Color>(Colors.white),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (emailcontroller.text != "" && usercontroller.text != "" && passcontroller.text != "" &&passcontroller2.text != "") {
                           if(passcontroller.text == passcontroller2.text) {
+
+                            // Create a CreacionPersona and add it to the personas table
+                            //var newUser = CreacionPersona(nombreUsuario: usercontroller.text, correoUsuario: emailcontroller.text, contrasenaUsuario: passcontroller.text);
+                            //await insertPersona(newUser);
+
+                            debugPrint("Entrando");
+                            insertarPersona(usercontroller.text, emailcontroller.text, passcontroller.text);
+                            debugPrint("Saliendo");
+
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text("Registro exitoso")));

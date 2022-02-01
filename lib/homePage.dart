@@ -31,14 +31,15 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState(persona: persona);
 
-  late List<Post> posts = [];
-  late List<String> rutas = [];
-  late List<Hotel> hoteles = [];
+  List<Post> posts =[];
+  List<String> rutas =[];
+  List<Hotel> hoteles =[];
   Map mapPost={};
   Map mapRutas={};
   Map mapHoteles={};
 
   getPost(String id) async{
+    posts = [];
     http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/posts/${id}'));
     List mapa = json.decode(response.body)["posts"] as List;
     for(Map<String, dynamic> data in mapa){
@@ -48,18 +49,20 @@ class HomePage extends StatefulWidget {
         Post nuevopost = Post(nameforest, linkforest, descripcionforest);
         posts.add(nuevopost);
     }
-    debugPrint(posts.toString());
+    debugPrint(posts.length.toString());
   }
   getRutas(String id) async{
+    rutas=[];
     http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/rutas/${id}'));
     List mapa = json.decode(response.body)["rutas"] as List;
     for(Map<String, dynamic> data in mapa){
       String ruta = data["path"];
       rutas.add(ruta);
     }
-
+    debugPrint(rutas[0].toString());
   }
   getHoteles(String id) async{
+    hoteles=[];
     http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/recomendaciones_hoteles/${id}'));
     List mapa = json.decode(response.body)["hoteles"] as List;
     for(Map<String, dynamic> data in mapa){
@@ -68,6 +71,7 @@ class HomePage extends StatefulWidget {
       Hotel nuevoHotel = Hotel(nombreHotel, precioHotel, "0989658754");
       hoteles.add(nuevoHotel);
     }
+    debugPrint(hoteles[0].name.toString());
   }
 
 }
@@ -157,16 +161,20 @@ class _HomePageState extends State<HomePage> {
           itemCount: destinosData == null ? 0 : destinosData.length,
           itemBuilder: (BuildContext context, int index) {
             return OutlinedButton(
-              onPressed: () {
-                widget.getPost(destinosData[index]["id"].toString());
-                widget.getRutas(destinosData[index]["id"].toString());
-                widget.getHoteles(destinosData[index]["id"].toString());
+              onPressed: () async {
+                await widget.getPost(destinosData[index]["id"].toString());
+                await widget.getRutas(destinosData[index]["id"].toString());
+                await widget.getHoteles(destinosData[index]["id"].toString());
                 info_destino = ClaseDestino(idDestino: destinosData[index]["id"], nombreDestino: destinosData[index]["name"], descripcionDestino: destinosData[index]["description"], ubicacionDestino: destinosData[index]["ubication"], scoreDestino: destinosData[index]["score"].toDouble(), postsDestino: widget.posts, rutasDestino: widget.rutas, hotelesDestino: widget.hoteles);
-                Navigator.push(
+
+
+                await Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Information_Forest(info_destino)
                   ),
                 );
+
+
               },
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all<Color>(Colors.black),

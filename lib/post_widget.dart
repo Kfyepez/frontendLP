@@ -11,7 +11,7 @@ class Post_Widget extends StatelessWidget{
   Widget build(BuildContext context) {
     TextStyle style=TextStyle(
         decoration: TextDecoration.none,
-        fontSize: 12,
+        fontSize: 20,
         fontFamily: "PoiretOne",
         color: Colors.black
     );
@@ -64,13 +64,16 @@ class Post_Widget extends StatelessWidget{
     );
 
     return Scaffold(
-      body: Column(
-        children: [
-          header,
-          post,
-          icons,
-          description
-        ],
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(10, 40, 10, 10),
+        child: Column(
+          children: [
+            header,
+            post,
+            icons,
+            description
+          ],
+        ),
       ),
     );
   }

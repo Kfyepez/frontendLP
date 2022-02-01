@@ -1,4 +1,6 @@
 //import 'package:first_flutter_app/post.dart';
+import 'dart:math';
+
 import 'package:frontend/createDestino.dart';
 import 'package:frontend/homePage.dart';
 import 'package:frontend/post.dart';
@@ -9,15 +11,29 @@ import 'package:flutter/material.dart';
 
 import 'hotel.dart';
 
+import 'dart:math';
+
 class Information_Forest extends StatefulWidget {
   ClaseDestino info_destino;
   Information_Forest(this.info_destino);
 
   @override
   State<Information_Forest> createState() => _Information_ForestState();
+
+
 }
 
 class _Information_ForestState extends State<Information_Forest> {
+
+  int contador=0;
+  int vistas=0;
+
+  getContador(){
+    var rng = new Random();
+    contador = rng.nextInt(100000)+1000;
+    vistas  = rng.nextInt(1000000)+100000;
+  }
+
   int page = 1;
   Widget getStars() {
     int piso = widget.info_destino.scoreDestino.floor();
@@ -166,6 +182,7 @@ class _Information_ForestState extends State<Information_Forest> {
 
   @override
   Widget build(BuildContext context) {
+    getContador();
     Widget name_forest = Text(
       widget.info_destino.nombreDestino,
       style: TextStyle(
@@ -271,15 +288,16 @@ class _Information_ForestState extends State<Information_Forest> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              "4512 likes",
+              "${contador} likes",
               style: style,
             ),
             Text(
-              "10004 views",
+              "${vistas} views",
               style: style,
             )
           ],
         ),
+
         vertical_space,
         separador,
         vertical_space,
@@ -291,9 +309,12 @@ class _Information_ForestState extends State<Information_Forest> {
     );
 
     return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        child: info,
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(10, 40, 10, 10),
+        child: Container(
+          alignment: Alignment.center,
+          child: info,
+        ),
       ),
     );
   }

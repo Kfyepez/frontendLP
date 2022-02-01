@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:frontend/createDestino.dart';
 import 'loginPage.dart';
 
 import 'package:http/http.dart' as http;
@@ -51,12 +52,18 @@ class _HomePageState extends State<HomePage> {
 
       appBar: AppBar(title: Text('Inicio'), actions: <Widget>[
         IconButton(
-            icon: const Icon(Icons.more_vert),
-            tooltip: 'Actualizando',
+            icon: const Icon(Icons.add),
+            padding: EdgeInsets.fromLTRB(0, 8, 15, 8),
+            tooltip: 'Añadir destino turistico',
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Actualizando ventana')));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CreateDestino()),
+              );
             }),
+        
+
       ]),
 
       drawer: Drawer(
@@ -94,45 +101,47 @@ class _HomePageState extends State<HomePage> {
             ),
           ])),
 
-      body: ListView.builder(
-        itemCount: destinosData == null ? 0 : destinosData.length,
-        itemBuilder: (BuildContext context, int index) {
-          return OutlinedButton(
-            onPressed: () {  },
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:  <Widget>[
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 20, 30, 10),
+      body: Container(
+        child: ListView.builder(
+          itemCount: destinosData == null ? 0 : destinosData.length,
+          itemBuilder: (BuildContext context, int index) {
+            return OutlinedButton(
+              onPressed: () {  },
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:  <Widget>[
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 20, 30, 10),
 
-                      child: Text("${destinosData[index]["id"]}"),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 20, 30, 10),
-                      child: Text("${destinosData[index]["name"]}"),
-                    ),
+                        child: Text("${destinosData[index]["id"]}"),
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 20, 30, 10),
+                        child: Text("${destinosData[index]["name"]}"),
+                      ),
 
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(60, 0, 30, 10),
-                  child: Text("${destinosData[index]["description"]}"),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(60, 0, 30, 10),
-                  child: Text("${destinosData[index]["ubication"]}"),
-                ),
+                    ],
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(60, 0, 30, 10),
+                    child: Text("${destinosData[index]["description"]}"),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(60, 0, 30, 10),
+                    child: Text("${destinosData[index]["ubication"]}"),
+                  ),
 
 
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
 

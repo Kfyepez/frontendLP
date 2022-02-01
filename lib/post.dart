@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 class Post extends StatelessWidget{
-  String photo_url;
-  String post_url;
-  String forest_name;
-  String text_description;
+  late String photo_url;
+  late String post_url;
+  late String forest_name;
+  late String text_description;
   @override
   Widget build(BuildContext context) {
     TextStyle style=TextStyle(

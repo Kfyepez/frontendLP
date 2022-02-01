@@ -1,4 +1,6 @@
 
+import 'package:flutter/material.dart';
+
 import 'hotel.dart';
 class Information_Forest extends StatefulWidget{
   String name;
@@ -228,3 +230,4 @@ class _Information_ForestState extends State<Information_Forest> {
 
    return Container( alignment: Alignment.center,child: info,);
   }
+}

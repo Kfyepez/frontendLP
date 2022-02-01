@@ -1,12 +1,46 @@
 import 'package:flutter/material.dart';
+import 'loginPage.dart';
 
-class HomePage extends StatelessWidget {
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
-  final usercontroller = TextEditingController();
-  final passcontroller = TextEditingController();
+class HomePage extends StatefulWidget {
+
+  ClasePersona? persona;
+  HomePage({this.persona});
+
+  @override
+  State<HomePage> createState() => _HomePageState(persona: persona);
+
+}
+
+class _HomePageState extends State<HomePage> {
+  Map data={};
+  List destinosData=[];
+
+  ClasePersona? persona;
+  _HomePageState({this.persona});
+
+
+
+  getDestinos() async{
+    http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/destinos_turisticos'));
+    data = json.decode(response.body);
+
+    //userData?.map((text) => debugPrint(text));
+    //debugPrint(userData?[0]["id"].toString());
+    //debugPrint(userData?.length);
+    //destinosData.forEach((element) {print(element["name"]);});
+    setState(() {
+      destinosData = data["destinos"];
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
+    getDestinos();
     return Scaffold(
 
       appBar: AppBar(title: Text('Inicio'), actions: <Widget>[
@@ -25,24 +59,15 @@ class HomePage extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.lightBlue,
                 ),
-                child: Text('Menú',
-                    style: TextStyle(color: Colors.white, fontSize: 20))),
-            ListTile(
-              leading: Icon(Icons.login),
-              title: Text('Iniciar sesión'),
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Redirigiendo a página de inicio de sesión')));
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.app_registration),
-              title: Text('Registrarse'),
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Redirigiendo a formulario de registro')));
-              },
-            ),
+                child: Column(
+                  children: [
+                    Text('Bienvenido', style: TextStyle(color: Colors.white, fontSize: 20)),
+                    Padding(child: Text("${persona?.nombreUsuario}", style: TextStyle(color: Colors.white, fontSize: 16)), padding: const EdgeInsets.all(8.0),),
+
+                    Text("${persona?.correoUsuario}", style: TextStyle(color: Colors.white, fontSize: 16)),
+
+                  ],
+                )),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('Configuración'),
@@ -53,60 +78,57 @@ class HomePage extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.logout),
-              title: Text('Salir'),
+              title: Text('Cerrar sesión'),
               onTap: () {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(const SnackBar(content: Text('Saliendo')));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
               },
             ),
           ])),
 
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.black12),
-                    foregroundColor:
-                    MaterialStateProperty.all<Color>(Colors.white),
-                  ),
-                  onPressed: () {
+      body: ListView.builder(
+        itemCount: destinosData == null ? 0 : destinosData.length,
+        itemBuilder: (BuildContext context, int index) {
+          return OutlinedButton(
+            onPressed: () {  },
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:  <Widget>[
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(10, 20, 30, 10),
 
-                    //Con este comando se redirigirá a la pagina que ustedes creen
-                    /*Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Nombre de la clase creada()),
-                    );*/
+                      child: Text("${destinosData[index]["id"]}"),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(10, 20, 30, 10),
+                      child: Text("${destinosData[index]["name"]}"),
+                    ),
 
-                  },
-                  child: Text('Parte Santiago'),
-                )),
-            Container(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.black12),
-                    foregroundColor:
-                    MaterialStateProperty.all<Color>(Colors.white),
-                  ),
-                  onPressed: () {
+                  ],
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(60, 0, 30, 10),
+                  child: Text("${destinosData[index]["description"]}"),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(60, 0, 30, 10),
+                  child: Text("${destinosData[index]["ubication"]}"),
+                ),
 
-                    //Con este comando se redirigirá a la pagina que ustedes creen
-                    /*Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Nombre de la clase creada()),
-                    );*/
 
-                  },
-                  child: Text('Parte Andrea'),
-                ))
-          ],
-        ),
-        
+              ],
+            ),
+          );
+        },
+
+
       ),
     );
 

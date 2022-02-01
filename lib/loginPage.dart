@@ -7,23 +7,41 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
+class ClasePersona{
+  String nombreUsuario;
+  String correoUsuario;
+  ClasePersona({required this.nombreUsuario, required this.correoUsuario});
+}
 
 class LoginPage extends StatelessWidget {
 
   final usercontroller = TextEditingController();
   final passcontroller = TextEditingController();
+  late String correoUsuario;
+  late final ClasePersona persona;
 
-  List? data;
+  Map data={};
+  List userData=[];
 
   getusers() async{
-    http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/personas'));
+      http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/personas'));
       data = json.decode(response.body);
+      userData = data["perosnas"];
+      //userData?.map((text) => debugPrint(text));
+      //debugPrint(userData[0]["id"].toString());
+      //debugPrint(userData?.length);
+      //userData.forEach((element) {print(element["id"]);});
 
+  }
+
+  String getusercontroller(){
+    return usercontroller.toString();
   }
 
 
   @override
   Widget build(BuildContext context) {
+    getusers();
     return Scaffold(
 
       appBar: AppBar(title: Text('Ingresa con tus datos'), actions: <Widget>[
@@ -92,17 +110,23 @@ class LoginPage extends StatelessWidget {
                       ),
                       onPressed: () {
                         int temp = 0;
-                        getusers();
-                        for(var i = 0; i<10;i++){
-                          if (usercontroller.text == data?[i]["user"] &&
-                              passcontroller.text == data?[i]["password"]){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => HomePage()),
-                            );
-                            temp = 1;
-                          }
+                        //getusers();
+                        userData.forEach((element) {
+                        if (usercontroller.text == element["user"] &&
+                            passcontroller.text == element["password"]){
+                          persona = ClasePersona(nombreUsuario: element["user"], correoUsuario: element["email"]);
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage(
+                              persona:persona
+                            )
+                            ),
+                          );
+                          temp = 1;
                         }
+                        });
+
                         if(temp ==0){
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(

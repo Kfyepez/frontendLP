@@ -1,24 +1,15 @@
-import 'package:first_flutter_app/post.dart';
-import 'package:first_flutter_app/post_widget.dart';
+//import 'package:first_flutter_app/post.dart';
+import 'package:frontend/homePage.dart';
+
+import 'post_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'hotel.dart';
 
 class Information_Forest extends StatefulWidget {
-  String name;
-
-  String url_img_portada;
-  String description;
-  double score;
-  int likes;
-  int views;
-  List<Post> posts;
-  List<Hotel> hoteles;
-  List<String> rutas;
-
-  Information_Forest(this.name, this.description, this.url_img_portada,
-      this.score, this.likes, this.views, this.posts, this.hoteles, this.rutas);
+  ClaseDestino info_destino;
+  Information_Forest(this.info_destino);
 
   @override
   State<Information_Forest> createState() => _Information_ForestState();
@@ -27,7 +18,7 @@ class Information_Forest extends StatefulWidget {
 class _Information_ForestState extends State<Information_Forest> {
   int page = 1;
   Widget getStars() {
-    int piso = widget.score.floor();
+    int piso = widget.info_destino.scoreDestino.floor();
     List<Widget> items = [];
     for (int i = 0; i < piso; i++) {
       items.add(Icon(
@@ -35,7 +26,7 @@ class _Information_ForestState extends State<Information_Forest> {
         color: Colors.yellow,
       ));
     }
-    if (piso != widget.score) {
+    if (piso != widget.info_destino.scoreDestino.floor()) {
       items.add(Icon(
         Icons.star_half,
         color: Colors.yellow,
@@ -49,8 +40,8 @@ class _Information_ForestState extends State<Information_Forest> {
 
   Widget galery() {
     List<Widget> images = [];
-    String photo_forest_url = widget.posts[0].link_img;
-    for (Post post in widget.posts) {
+    String photo_forest_url = widget.info_destino.postsDestino[0].link_img;
+    for (dynamic post in widget.info_destino.postsDestino) {
       images.add(GestureDetector(
         child: Container(
           width: 100,
@@ -69,7 +60,7 @@ class _Information_ForestState extends State<Information_Forest> {
                   pageBuilder: (BuildContext context,
                           Animation<double> animation,
                           Animation<double> secondaryAnimation) =>
-                      Post_Widget(photo_forest_url, post)))
+                      Post_Widget(widget.info_destino.postsDestino[0]["imagen"]["link"])))
         },
       ));
     }
@@ -92,7 +83,7 @@ class _Information_ForestState extends State<Information_Forest> {
         fontSize: 20,
         fontFamily: "PoiretOne",
         color: Colors.black);
-    for (Hotel hotel in widget.hoteles) {
+    for (Hotel hotel in widget.info_destino.hotelesDestino) {
       info.add(Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -129,7 +120,7 @@ class _Information_ForestState extends State<Information_Forest> {
         fontFamily: "PoiretOne",
         color: Colors.black);
     int cont = 1;
-    for (String transport in widget.rutas) {
+    for (String transport in widget.info_destino.rutasDestino) {
       info.add(Column(
         children: [
           Text(
@@ -174,7 +165,7 @@ class _Information_ForestState extends State<Information_Forest> {
   @override
   Widget build(BuildContext context) {
     Widget name_forest = Text(
-      widget.name,
+      widget.info_destino.nombreDestino,
       style: TextStyle(
           decoration: TextDecoration.none,
           fontWeight: FontWeight.w100,
@@ -188,7 +179,7 @@ class _Information_ForestState extends State<Information_Forest> {
       width: 200,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
-        child: Image(image: NetworkImage(widget.url_img_portada)),
+        child: Image(image: NetworkImage(widget.info_destino.postsDestino[0])),
       ),
     );
     Widget vertical_space = SizedBox(
@@ -251,7 +242,7 @@ class _Information_ForestState extends State<Information_Forest> {
     Widget description = Container(
       child: Flexible(
         child: Text(
-          widget.description,
+          widget.info_destino.descripcionDestino,
           style: TextStyle(
               decoration: TextDecoration.none,
               fontSize: 15,
@@ -268,7 +259,7 @@ class _Information_ForestState extends State<Information_Forest> {
         vertical_space,
         description,
         Text(
-          "${widget.score} de 5 estrellas",
+          "${widget.info_destino.scoreDestino} de 5 estrellas",
           style: style,
         ),
         vertical_space,
@@ -278,11 +269,11 @@ class _Information_ForestState extends State<Information_Forest> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              "${widget.likes} likes",
+              "345 likes",
               style: style,
             ),
             Text(
-              "${widget.views} views",
+              "1450 views",
               style: style,
             )
           ],
@@ -297,9 +288,11 @@ class _Information_ForestState extends State<Information_Forest> {
       ],
     );
 
-    return Container(
-      alignment: Alignment.center,
-      child: info,
+    return Scaffold(
+      body: Container(
+        alignment: Alignment.center,
+        child: info,
+      ),
     );
   }
 }

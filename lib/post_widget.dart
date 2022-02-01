@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-class Post extends StatelessWidget{
+class Post_widget extends StatelessWidget{
   late String photo_url;
   late String post_url;
   late String forest_name;

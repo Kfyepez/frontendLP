@@ -1,6 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/createDestino.dart';
+import 'package:frontend/forest_account.dart';
+import 'package:frontend/post_widget.dart';
+import 'hotel.dart';
 import 'loginPage.dart';
 
 import 'package:http/http.dart' as http;
@@ -8,9 +11,15 @@ import 'dart:async';
 import 'dart:convert';
 
 class ClaseDestino{
+  int idDestino;
   String nombreDestino;
-  String scoreDestino;
-  ClaseDestino({required this.nombreDestino, required this.scoreDestino});
+  String descripcionDestino;
+  String ubicacionDestino;
+  double scoreDestino;
+  List postsDestino;
+  List rutasDestino;
+  List hotelesDestino;
+  ClaseDestino({required this.idDestino, required this.nombreDestino, required this.descripcionDestino, required this.ubicacionDestino, required this.scoreDestino, required this.postsDestino, required this.rutasDestino, required this.hotelesDestino});
 }
 
 class HomePage extends StatefulWidget {
@@ -21,11 +30,41 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState(persona: persona);
 
+  late List<dynamic> posts;
+  late List rutas;
+  late List hoteles;
+  Map mapPost={};
+  Map mapRutas={};
+  Map mapHoteles={};
+
+  getPost(String id) async{
+    http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/posts/${id}'));
+    mapPost = json.decode(response.body);
+    posts = mapPost["posts"];
+    //debugPrint(posts.toString());
+  }
+  getRutas(String id) async{
+    http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/rutas/${id}'));
+    mapRutas = json.decode(response.body);
+    rutas = mapRutas["rutas"];
+    //debugPrint(json.decode(response.body).runtimeTypetoString());
+    //debugPrint(rutas.toString());
+  }
+  getHoteles(String id) async{
+    http.Response response = await http.get(Uri.parse('http://10.0.2.2:3000/recomendaciones_hoteles/${id}'));
+    mapHoteles = json.decode(response.body);
+    hoteles = mapHoteles["hoteles"];
+    //ebugPrint(mapHoteles.toString());
+    //debugPrint(hoteles.toString());
+  }
+
 }
 
 class _HomePageState extends State<HomePage> {
   Map data={};
   List destinosData=[];
+  
+  late ClaseDestino info_destino;
 
   ClasePersona? persona;
   _HomePageState({this.persona});
@@ -106,7 +145,17 @@ class _HomePageState extends State<HomePage> {
           itemCount: destinosData == null ? 0 : destinosData.length,
           itemBuilder: (BuildContext context, int index) {
             return OutlinedButton(
-              onPressed: () {  },
+              onPressed: () {
+                widget.getPost(destinosData[index]["id"].toString());
+                widget.getRutas(destinosData[index]["id"].toString());
+                widget.getHoteles(destinosData[index]["id"].toString());
+                info_destino = ClaseDestino(idDestino: destinosData[index]["id"], nombreDestino: destinosData[index]["name"], descripcionDestino: destinosData[index]["description"], ubicacionDestino: destinosData[index]["ubication"], scoreDestino: destinosData[index]["score"].toDouble(), postsDestino: widget.posts, rutasDestino: widget.rutas, hotelesDestino: widget.hoteles);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Information_Forest(info_destino)
+                  ),
+                );
+              },
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
               ),

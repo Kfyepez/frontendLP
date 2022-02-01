@@ -1,39 +1,42 @@
 
 import 'package:flutter/material.dart';
+import 'package:frontend/homePage.dart';
+import 'package:frontend/post_widget.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 import 'hotel.dart';
+
 class Information_Forest extends StatefulWidget{
-  String name;
-
-  String url_img_portada;
-  String description;
-  double score;
-  int likes;
-  int views;
-  List<String> imagenes;
-  List<Hotel> hoteles;
-  List<String> rutas;
-
-
-  Information_Forest(this.name,this.description,this.url_img_portada, this.score, this.likes, this.views,this.imagenes,this.hoteles,this.rutas);
+  ClaseDestino? info_destino;
+  Information_Forest(this.info_destino);
 
   @override
-  State<Information_Forest> createState() => _Information_ForestState();
+  State<Information_Forest> createState() => _Information_ForestState(info_destino);
 }
 
 class _Information_ForestState extends State<Information_Forest> {
+  ClaseDestino? info_destino;
+  _Information_ForestState(this.info_destino);
+
+
+
+
   int page=1;
   Widget getStars(){
-    int piso=widget.score.floor();
+    double? piso=info_destino?.scoreDestino;
     List<Widget> items=[];
-    for(int i=0;i<piso;i++){
+    for(int i=0;i<piso!;i++){
       items.add(Icon(Icons.star, color: Colors.yellow,));
     }
-    if(piso!=widget.score){
+    if(piso!=info_destino?.scoreDestino){
       items.add(Icon(Icons.star_half,color: Colors.yellow,));
     }
     return Row( mainAxisAlignment:MainAxisAlignment.center,children: items,);
   }
+  /*
   Widget galery(){
     List<Widget> images=[];
     for(String image in widget.imagenes){
@@ -64,6 +67,7 @@ class _Information_ForestState extends State<Information_Forest> {
         fontFamily: "PoiretOne",
         color: Colors.black
     );
+
     for(Hotel hotel in widget.hoteles){
       info.add(
         Row(
@@ -132,10 +136,10 @@ class _Information_ForestState extends State<Information_Forest> {
       default:
         return galery();
     }
-  }
+  }*/
   @override
   Widget build(BuildContext context) {
-    Widget name_forest=Text(widget.name, style: TextStyle(
+    Widget name_forest=Text(info_destino!.nombreDestino, style: TextStyle(
         decoration: TextDecoration.none,
         fontWeight: FontWeight.w100,
         fontSize: 50,
@@ -143,16 +147,16 @@ class _Information_ForestState extends State<Information_Forest> {
         color: Colors.black
     ),);
     // TODO: implement build
-
+/*
     Widget photo=Container(
       width: 200,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
         child: Image(
-            image: NetworkImage(widget.url_img_portada)
+            image: NetworkImage(widget.info_des)
         ),
       ),
-    );
+    );*/
     Widget vertical_space=SizedBox(
       height: 10,
     );
@@ -190,6 +194,7 @@ class _Information_ForestState extends State<Information_Forest> {
         ),
       ),
     );
+    /*
     Widget description=Container(
       child: Flexible(
         child: Text(widget.description,style: TextStyle(
@@ -199,35 +204,36 @@ class _Information_ForestState extends State<Information_Forest> {
             color: Colors.black54
         ),),
       ),
-    );
+    );*/
+
     Widget info= new Column(
 
       children: [
         name_forest,
         vertical_space,
-        photo,
+        //photo,
         vertical_space,
-        description,
+        //description,
         Text(
-            "${widget.score} de 5 estrellas",
+            "${widget.info_destino?.scoreDestino} de 5 estrellas",
           style: style,
         ),
         vertical_space,
         getStars(),
         vertical_space,
-        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [Text("${widget.likes} likes",style: style,), Text("${widget.views} views",style: style,)],),
+        //Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [Text("${widget.likes} likes",style: style,), Text("${widget.views} views",style: style,)],),
         vertical_space,
         separador,
         vertical_space,
         navigation,
         vertical_space,
         separador,
-        body()
+        //body()
       ],
 
     );
 
 
-   return Container( alignment: Alignment.center,child: info,);
+   return Scaffold(body: Container( alignment: Alignment.center,child: info,));
   }
 }

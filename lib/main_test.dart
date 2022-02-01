@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Information_Forest(name,description,url,score,likes,views,imagenes,hoteles,transportes)
+      //home: Information_Forest(name,description,url,score,likes,views,imagenes,hoteles,transportes)
       // MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

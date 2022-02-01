@@ -1,9 +1,12 @@
+import 'package:first_flutter_app/favorite_button.dart';
+import 'package:first_flutter_app/post.dart';
 import 'package:flutter/material.dart';
-class Post_widget extends StatelessWidget{
-  late String photo_url;
-  late String post_url;
-  late String forest_name;
-  late String text_description;
+class Post_Widget extends StatelessWidget{
+  String photo_forest_url;
+  Post post;
+
+  Post_Widget(this.photo_forest_url, this.post);
+
   @override
   Widget build(BuildContext context) {
     TextStyle style=TextStyle(
@@ -25,7 +28,7 @@ class Post_widget extends StatelessWidget{
           shape: BoxShape.circle,
           image: DecorationImage(
               fit: BoxFit.fitHeight,
-              image: NetworkImage(photo_url)
+              image: NetworkImage(photo_forest_url)
           )
       ),
     );
@@ -33,16 +36,21 @@ class Post_widget extends StatelessWidget{
       children: [
         photo,
         horizontal_space,
-        Text(forest_name,style: style)
+        Text(this.post.name_forest,style: style)
       ],
     );
     Widget post=Container(
       height: 400,
-      child: Image( image: NetworkImage(post_url),),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            fit: BoxFit.contain,
+            image: NetworkImage(this.post.link_img)
+        )
+    )
     );
     Widget icons=Row(
       children: [
-        Icon(Icons.favorite),
+        FavoriteButton(),
         horizontal_space,
         Icon(Icons.comment),
         horizontal_space,
@@ -52,10 +60,8 @@ class Post_widget extends StatelessWidget{
       ],
     );
     Widget description= Expanded(
-      child: Text("${forest_name}: "+text_description,style: style,),
+      child: Text("${this.post.name_forest}: "+this.post.description,style: style,),
     );
-
-
 
     return Column(
       children: [

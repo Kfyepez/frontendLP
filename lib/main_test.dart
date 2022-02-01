@@ -8,6 +8,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  String description="";
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +18,17 @@ class MyApp extends StatelessWidget {
     int likes=3000;
     int views=9000;
     List<String> imagenes=[];
-    List<String> hoteles=[];
+    List<Hotel> hoteles=[];
     List<String> transportes=[];
     for (int i=0;i<10;i++){
-      hoteles.add("Hotel ${i}");
+      Hotel hotel= new Hotel("Hotel ${i}",356,"+593 546982365");
+      hoteles.add(hotel);
       transportes.add("Transporte ${i}");
       imagenes.add("https://previews.123rf.com/images/efimenkoalex/efimenkoalex1606/efimenkoalex160600116/58959663-brunette-stands-near-the-birch-in-forest-girl-walking-on-the-green-forest-girl-in-short-summer-dress.jpg");
     }
+    String description="It is a natural forest of bamboo in Arashiyama, Kyoto, Japan. The forest consists mostly of Moso Bamboo (Phyllostachys edulis) and consists of several pathways for tourists and visitors.";
     return MaterialApp(
-        //debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -39,7 +42,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Information_Forest(name,url,score,likes,views,imagenes,hoteles,transportes)
+      home: Information_Forest(name,description,url,score,likes,views,imagenes,hoteles,transportes)
       // MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

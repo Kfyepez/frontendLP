@@ -1,16 +1,19 @@
-import 'package:flutter/material.dart';
+
+import 'hotel.dart';
 class Information_Forest extends StatefulWidget{
   String name;
-  String url;
+
+  String url_img_portada;
+  String description;
   double score;
   int likes;
   int views;
   List<String> imagenes;
-  List<String> hoteles;
-  List<String> transportes;
+  List<Hotel> hoteles;
+  List<String> rutas;
 
 
-  Information_Forest(this.name,this.url, this.score, this.likes, this.views,this.imagenes,this.hoteles,this.transportes);
+  Information_Forest(this.name,this.description,this.url_img_portada, this.score, this.likes, this.views,this.imagenes,this.hoteles,this.rutas);
 
   @override
   State<Information_Forest> createState() => _Information_ForestState();
@@ -49,6 +52,9 @@ class _Information_ForestState extends State<Information_Forest> {
     );
   }
   Widget hoteles(){
+    Widget horizontal_space=SizedBox(
+      width: 10,
+    );
     List<Widget> info=[];
     TextStyle style=TextStyle(
         decoration: TextDecoration.none,
@@ -56,14 +62,21 @@ class _Information_ForestState extends State<Information_Forest> {
         fontFamily: "PoiretOne",
         color: Colors.black
     );
-    for(String hotel in widget.hoteles){
+    for(Hotel hotel in widget.hoteles){
       info.add(
-        Column(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(hotel,style: style),
-            Text("Contact: +593 9563214569",style: style),
-            SizedBox(
-              height: 30,
+            Icon(Icons.house_rounded,size: 30,),
+            horizontal_space,
+            Column(
+              children: [
+                Text(hotel.name,style: style),
+                Text("Contact: ${hotel.phone}",style: style),
+                SizedBox(
+                  height: 30,
+                )
+              ],
             )
           ],
         )
@@ -76,7 +89,7 @@ class _Information_ForestState extends State<Information_Forest> {
         ),
       );
   }
-  Widget transport(){
+  Widget rutas(){
     List<Widget> info=[];
     TextStyle style=TextStyle(
         decoration: TextDecoration.none,
@@ -84,12 +97,13 @@ class _Information_ForestState extends State<Information_Forest> {
         fontFamily: "PoiretOne",
         color: Colors.black
     );
-    for(String transport in widget.transportes){
+    int cont=1;
+    for(String transport in widget.rutas){
       info.add(
           Column(
             children: [
-              Text(transport, style: style,),
-              Text("Price: \$35",style: style,),
+              Text("Ruta ${cont}", style: style,),
+              Text("Path: ${transport}.....",style: style,),
               Text("Time travel: 2 hours",style: style,),
               SizedBox(
               height: 30,
@@ -112,7 +126,7 @@ class _Information_ForestState extends State<Information_Forest> {
       case 2:
         return hoteles();
       case 3:
-        return transport();
+        return rutas();
       default:
         return galery();
     }
@@ -127,12 +141,13 @@ class _Information_ForestState extends State<Information_Forest> {
         color: Colors.black
     ),);
     // TODO: implement build
+
     Widget photo=Container(
       width: 200,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
         child: Image(
-            image: NetworkImage(widget.url)
+            image: NetworkImage(widget.url_img_portada)
         ),
       ),
     );
@@ -155,10 +170,10 @@ class _Information_ForestState extends State<Information_Forest> {
           GestureDetector(child: Icon(Icons.grid_on, color: page==1?Colors.blue:Colors.black,),onTap: (){ setState(() {
             page=1;
           });},),
-          GestureDetector(child: Icon(Icons.directions_car, color: page==2?Colors.blue:Colors.black,),onTap: (){ setState(() {
+          GestureDetector(child: Icon(Icons.hotel, color: page==2?Colors.blue:Colors.black,),onTap: (){ setState(() {
     page=2;
     });}),
-          GestureDetector(child: Icon(Icons.hotel, color: page==3?Colors.blue:Colors.black,),onTap: (){ setState(() {
+          GestureDetector(child: Icon(Icons.directions_car, color: page==3?Colors.blue:Colors.black,),onTap: (){ setState(() {
     page=3;
     });}),
 
@@ -173,6 +188,16 @@ class _Information_ForestState extends State<Information_Forest> {
         ),
       ),
     );
+    Widget description=Container(
+      child: Flexible(
+        child: Text(widget.description,style: TextStyle(
+            decoration: TextDecoration.none,
+            fontSize: 15,
+            fontFamily: "PoiretOne",
+            color: Colors.black54
+        ),),
+      ),
+    );
     Widget info= new Column(
 
       children: [
@@ -180,6 +205,7 @@ class _Information_ForestState extends State<Information_Forest> {
         vertical_space,
         photo,
         vertical_space,
+        description,
         Text(
             "${widget.score} de 5 estrellas",
           style: style,
@@ -202,4 +228,3 @@ class _Information_ForestState extends State<Information_Forest> {
 
    return Container( alignment: Alignment.center,child: info,);
   }
-}

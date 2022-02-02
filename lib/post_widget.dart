@@ -1,11 +1,22 @@
-import '/favorite_button.dart';
+
 import '/post.dart';
 import 'package:flutter/material.dart';
-class Post_Widget extends StatelessWidget{
+import 'dart:math';
+
+import 'package:favorite_button/favorite_button.dart';
+
+class Post_Widget extends StatefulWidget{
   String photo_forest_url;
   Post post;
-
   Post_Widget(this.photo_forest_url, this.post);
+
+  @override
+  State<Post_Widget> createState() => _Post_WidgetState();
+}
+
+class _Post_WidgetState extends State<Post_Widget> {
+
+  int num_likes=4;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +39,7 @@ class Post_Widget extends StatelessWidget{
           shape: BoxShape.circle,
           image: DecorationImage(
               fit: BoxFit.fitHeight,
-              image: NetworkImage(photo_forest_url)
+              image: NetworkImage(widget.photo_forest_url)
           )
       ),
     );
@@ -36,7 +47,7 @@ class Post_Widget extends StatelessWidget{
       children: [
         photo,
         horizontal_space,
-        Text(this.post.name_forest,style: style)
+        Text(this.widget.post.name_forest,style: style)
       ],
     );
     Widget post=Container(
@@ -44,13 +55,21 @@ class Post_Widget extends StatelessWidget{
       decoration: BoxDecoration(
         image: DecorationImage(
             fit: BoxFit.contain,
-            image: NetworkImage(this.post.link_img)
+            image: NetworkImage(this.widget.post.link_img)
         )
     )
     );
     Widget icons=Row(
       children: [
-        FavoriteButton(),
+        FavoriteButton(
+          valueChanged: (_isFavorite) {
+            setState(() {
+              num_likes++;
+            });
+          },
+
+        ),
+        Text("${num_likes}"),
         horizontal_space,
         Icon(Icons.comment),
         horizontal_space,
@@ -60,7 +79,7 @@ class Post_Widget extends StatelessWidget{
       ],
     );
     Widget description= Expanded(
-      child: Text("${this.post.name_forest}: "+this.post.description,style: style,),
+      child: Text("${this.widget.post.name_forest}: "+this.widget.post.description,style: style,),
     );
 
     return Scaffold(
@@ -77,5 +96,4 @@ class Post_Widget extends StatelessWidget{
       ),
     );
   }
-
 }

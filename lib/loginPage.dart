@@ -67,7 +67,6 @@ class LoginPage extends StatelessWidget {
                         controller: usercontroller,
                         decoration: const InputDecoration(
                           icon: Icon(Icons.person),
-                          hintText: 'admin',
                           labelText: 'Usuario:',
                         ),
                         onSaved: (String? value) {
@@ -88,7 +87,6 @@ class LoginPage extends StatelessWidget {
                         decoration: const InputDecoration(
                           icon: Icon(Icons.password),
                           labelText: 'Contraseña:',
-                          hintText: 'admin',
                         ),
                         onSaved: (String? value) {
                           // This optional block of code can be used to run
